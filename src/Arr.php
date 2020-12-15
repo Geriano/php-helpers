@@ -5,20 +5,9 @@ namespace Geriano\Helpers;
 class Arr
 {
   /**
-   * Wrap item to array
-   */
-  public static function wrap($items = null) : array 
-  {
-    if(is_null($items)) return [];
-    if(is_array($items)) return $items;
-
-    return [$items];
-  }
-
-  /**
    * Get value from array
    * 
-   * @param array $data 
+   * @param array $data
    * @param string|int $key
    * @param mixed $default
    * @return mixed
@@ -27,40 +16,129 @@ class Arr
   {
     if(array_key_exists($key, $data)) return $data[$key];
 
-    if(strpos($key, '.') != false) return Arr::dot($data, $key);
+    if(is_int($key)) return $default;
+
+    if(strpos($key, '.') !== false) return Arr::dot($data, $key, $default);
 
     return $default;
   }
 
   /**
    * @param array $data
-   * @param string $key 
+   * @param string $key
    * @param mixed $default
    * @return mixed
    */
-  protected static function dot(array $data, string $key, $default = null)
+  public static function dot(array $data, string $key, $default = null)
   {
-    $keys  = explode('.', trim($key, '.'));
+    $keys  = explode('.', $key);
     $first = array_shift($keys);
 
-    if($keys) return Arr::get($data[$first], implode('.', $keys), $default);
-    
-    return Arr::get($data, $first, $default);
+    if(Arr::has($data, $first, false)) {
+      if($keys) return Arr::get($data[$first], implode('.', $keys), $default);
+
+      return $data[$first];
+    }
+
+    return $default;
   }
 
   /**
-   * Plus array
+   * Wrap an item to array
    * 
+   * @param mixed $item
    * @return array
    */
-  public static function plus(array ...$parameters)
+  public static function wrap($item) : array
   {
-    $result = [];
+    if(is_array($item)) return $item;
+    if(is_null($item)) return [];
 
-    foreach($parameters as $arr) {
-      $result = $result + $arr;
+    return [$item];
+  }
+
+  /**
+   * Check an array key exists
+   * 
+   * @param array $data
+   * @param string|int $key
+   * @param bool $dot
+   * @return bool
+   */
+  public static function has(array $data, string|int $key, bool $dot = true)
+  {
+    if(array_key_exists($key, $data)) return true;
+    if(! is_string($key) or ! $dot) return false;
+
+    $keys  = explode('.', $key);
+    $first = array_shift($keys);
+
+    if(Arr::has($data, $first, false)) {
+      if($keys) return Arr::has($data[$first], implode('.', $keys), true);
+
+      return true;
     }
 
-    return $result;
+    return false;
+  }
+
+  /**
+   * Set value to array
+   * 
+   * @param array $data
+   * @param string|int $key 
+   * @param mixed $val
+   * @param bool $dot
+   * @return array
+   */
+  public static function set(array &$data, string|int $key, $val, bool $dot = true) : array
+  {
+    if(is_int($key) or ! $dot) {
+      $data[$key] = $val;
+
+      return $data;
+    }
+
+    $keys  = explode('.', $key);
+    $first = array_shift($keys);
+
+    if(Arr::has($data, $first, false)) {
+      if($keys) return $data[$first] = Arr::set($data[$first], implode('.', $keys), $val);
+      
+      return $data[$first] = Arr::set($data[$first], $first, $val);
+    } else {
+      $data[$first] = $val;
+    }
+
+    return $data;
+  }
+
+  /**
+   * Remove an array value
+   * 
+   * @param array $data
+   * @param string|int $key
+   * @return array
+   */
+  public static function remove(array &$data, string $key)
+  {
+    if(Arr::has($data, $key, false)) {
+      unset($data[$key]);
+
+      return $data;
+    }
+
+    if(is_int($key)) return $data;
+
+    $keys  = explode('.', $key);
+    $first = array_shift($keys);
+
+    if(Arr::has($data, $first, false)) {
+      if($keys) return Arr::remove($data[$first], implode('.', $keys));
+
+      unset($data[$first]);
+    }
+
+    return $data;
   }
 }

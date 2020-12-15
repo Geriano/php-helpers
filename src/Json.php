@@ -41,7 +41,7 @@ class Json implements ArrayAccess
    */
   public function offsetExists($offset)
   {
-    return array_key_exists($offset, $this->__data);
+    return Arr::has($this->__data, $offset, false);
   }
 
   /**
@@ -49,9 +49,7 @@ class Json implements ArrayAccess
    */
   public function offsetGet($offset)
   {
-    $offset = (string) $offset;
-
-    return $this->{$offset};
+    return Arr::get($this->__data, $offset);
   }
 
   /**
@@ -59,7 +57,7 @@ class Json implements ArrayAccess
    */
   public function offsetSet($offset, $val)
   {
-    return $this->__data[$offset] = $val;
+    Arr::set($this->__data, $offset, $val);
   }
 
   /**
@@ -67,6 +65,6 @@ class Json implements ArrayAccess
    */
   public function offsetUnset($offset)
   {
-    unset($this->__data[$offset]);
+    Arr::remove($this->__data, $offset);
   }
 }
