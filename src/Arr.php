@@ -141,4 +141,18 @@ class Arr
 
     return $data;
   }
+
+  /**
+   * @param array ...$args
+   * @return array
+   */
+  public function plus(array ...$args) : array
+  {
+    $data = [];
+
+    foreach($args as $arg)
+      $data = $data + $arg;
+
+    return $data;
+  }
 }
