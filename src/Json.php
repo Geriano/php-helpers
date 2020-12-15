@@ -25,7 +25,7 @@ class Json implements ArrayAccess
    */
   public function __get(string $key)
   {
-    return Arr::get($this->data, $key);
+    return Arr::get($this->__data, $key);
   }
 
   /**
