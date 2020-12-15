@@ -1,0 +1,20 @@
+{
+    "name": "geriano/helpers",
+    "description": "Helper Package",
+    "type": "library",
+    "require": {
+        "php": "8"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Geriano",
+            "email": "gerznewbie@gmail.com"
+        }
+    ],
+    "autoload": {
+	"psr-4": {
+		"Geriano\\Helpers\\": "src"
+	}
+    }
+}
