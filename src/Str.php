@@ -21,6 +21,7 @@ class Str
         // upper case
         rand(ord('A'), ord('Z')),
 
+        // number
         rand(ord('0'), ord('9'))
       ];
 
