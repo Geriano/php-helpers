@@ -2,6 +2,8 @@
 
 namespace Geriano\Helpers;
 
+use ArrayIterator;
+
 class Arr
 {
   /**
@@ -91,7 +93,7 @@ class Arr
    * @param bool $dot
    * @return array
    */
-  public static function set(array &$data, string|int $key, $val, bool $dot = true) : array
+  public static function set(array &$data, string|int $key, $val, bool $dot = true)
   {
     if(is_int($key) or ! $dot) {
       $data[$key] = $val;
@@ -105,12 +107,10 @@ class Arr
     if(Arr::has($data, $first, false)) {
       if($keys) return $data[$first] = Arr::set($data[$first], implode('.', $keys), $val);
       
-      return $data[$first] = Arr::set($data[$first], $first, $val);
+      $data[$first] = $val;
     } else {
       $data[$first] = $val;
     }
-
-    return $data;
   }
 
   /**
@@ -146,7 +146,7 @@ class Arr
    * @param array ...$args
    * @return array
    */
-  public function plus(array ...$args) : array
+  public static function plus(array ...$args) : array
   {
     $data = [];
 
@@ -154,5 +154,14 @@ class Arr
       $data = $data + $arg;
 
     return $data;
+  }
+
+  /**
+   * @param array $data
+   * @return \ArrayIterator
+   */
+  public static function iterator(array $data = [])
+  {
+    return new ArrayIterator($data);
   }
 }
