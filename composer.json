@@ -1,6 +1,6 @@
 {
     "name": "geriano/helpers",
-    "description": "Dependency injections",
+    "description": "Helper Library",
     "require": {
         "php": "^8"
     },
