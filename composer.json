@@ -1,11 +1,10 @@
 {
     "name": "geriano/helpers",
-    "description": "Helper Package",
-    "type": "library",
+    "description": "Dependency injections",
     "require": {
-        "php": "8"
+        "php": "^8"
     },
-    "license": "mit",
+    "license": "MIT",
     "authors": [
         {
             "name": "Geriano",
@@ -13,8 +12,13 @@
         }
     ],
     "autoload": {
-	"psr-4": {
-		"Geriano\\Helpers\\": "src"
-	}
-    }
+        "psr-4": {
+            "Geriano\\Helpers\\": "src"
+        }
+    },
+    "composer-runtime-api": "^1.0|^2.0",
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
 }
